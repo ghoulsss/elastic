@@ -6,8 +6,7 @@ WORKDIR /app
 RUN pip install uv
 
 # Копирование зависимостей
-COPY pyproject.toml ./
-COPY requirements.txt ./
+COPY pyproject.toml uv.lock ./
 
 # Установка зависимостей через uv
 RUN uv pip install --system -r requirements.txt
