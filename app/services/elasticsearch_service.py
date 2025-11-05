@@ -15,6 +15,7 @@ class ElasticsearchService:
     def __init__(self):
         self.client: Optional[AsyncElasticsearch] = None
         self.index_name = settings.default_index
+        # self.index_name = "bdd"
 
     async def connect(self):
         """Подключение к Elasticsearch"""
