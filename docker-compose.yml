@@ -1,25 +1,18 @@
-version: "3.8"
-
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
     container_name: elasticsearch
     environment:
+      - node.name=es-node
       - discovery.type=single-node
-      - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=true
+      - xpack.security.enrollment.enabled=true
+#      - ELASTIC_PASSWORD=changeme123
     ports:
       - "9200:9200"
-      - "9300:9300"
-    volumes:
-      - elasticsearch_data:/usr/share/elasticsearch/data
-    networks:
-      - app-network
     healthcheck:
-      test:
-        ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
-      interval: 30s
-      timeout: 10s
+      test: ["CMD-SHELL", "curl -u elastic:changeme123 -f http://localhost:9200 || exit 1"]
+      interval: 10s
       retries: 5
 
   app:
@@ -29,19 +22,15 @@ services:
       - "8000:8000"
     environment:
       - ELASTICSEARCH_HOST=http://elasticsearch:9200
+#      - ELASTIC_USER=elastic
+#      - ELASTIC_PASSWORD=changeme123
     depends_on:
       elasticsearch:
         condition: service_healthy
-    volumes:
-      - ./app:/app/app
-    networks:
-      - app-network
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-
-volumes:
-  elasticsearch_data:
-    driver: local
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
 
 networks:
   app-network:
-    driver: bridge
+
+volumes:
+  es_data:

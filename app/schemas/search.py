@@ -13,15 +13,13 @@ class SearchQuery(BaseModel):
     from_: int = Field(
         default=0, ge=0, alias="from", description="Смещение для пагинации"
     )
-    # category: Optional[str] = Field(default=None, description="Фильтр по категории")
-    # tags: Optional[List[str]] = Field(default=None, description="Фильтр по тегам")
 
     class Config:
         populate_by_name = True
         json_schema_extra = {
             "example": {
                 "query": "Elasticsearch tutorial",
-                "fields": ["title", "content"],
+                "fields": ["title", "content", "id"],
                 "size": 5,
                 "from": 0,
             }

@@ -21,20 +21,20 @@ async def lifespan(app: FastAPI):
         # Startup
         logger.info("Starting application...")
 
-        await es_service.connect()
+        es_service.connect()
         logger.info("Connected to Elasticsearch")
 
         # Проверка доступности
-        info = await es_service.client.info()
+        info = es_service.client.info()
         logger.info(f"Elasticsearch version: {info['version']['number']}")
 
-        await es_service.create_index("test")
+        es_service.create_index("test")
         logger.info("Application started successfully")
 
     except Exception as e:
         logger.error(f"Failed to connect to Elasticsearch: {e}")
         # Закрываем соединение при ошибке
-        await es_service.close()
+        es_service.close()
         raise  # Пробрасываем ошибку дальше
 
     yield

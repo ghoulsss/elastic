@@ -1,12 +1,13 @@
 from pydantic_settings import BaseSettings
 from functools import lru_cache
+import os
 
 
 class Settings(BaseSettings):
     # Elasticsearch
-    elasticsearch_host: str = "http://localhost:9200"
-    elasticsearch_user: str = "elastic"
-    elasticsearch_password: str = "root"
+    elasticsearch_host: str = os.getenv("ELASTICSEARCH_HOST", "http://localhost:9200")
+    elasticsearch_user: str = os.getenv("ELASTIC_USER", "elastic")
+    elasticsearch_password: str = os.getenv("ELASTIC_PASSWORD", "changeme123")
 
     # Application
     app_host: str = "0.0.0.0"

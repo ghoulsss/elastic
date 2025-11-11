@@ -62,15 +62,15 @@ async def get_document(doc_id: str, service: es_service = Depends(get_es_service
     return document
 
 
-@router.put("/documents/{doc_id}")
-async def update_document(
-    doc_id: str, updates: dict, service: es_service = Depends(get_es_service)
-):
-    """Обновление документа"""
-    success = await service.update_document(doc_id, updates)
-    if not success:
-        raise HTTPException(status_code=404, detail="Document not found")
-    return {"message": "Document updated successfully"}
+# @router.put("/documents/{doc_id}")
+# async def update_document(
+#     doc_id: str, updates: dict, service: es_service = Depends(get_es_service)
+# ):
+#     """Обновление документа"""
+#     success = await service.update_document(doc_id, updates)
+#     if not success:
+#         raise HTTPException(status_code=404, detail="Document not found")
+#     return {"message": "Document updated successfully"}
 
 
 @router.delete("/documents/{doc_id}", status_code=status.HTTP_204_NO_CONTENT)
